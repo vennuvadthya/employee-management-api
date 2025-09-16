@@ -1,0 +1,45 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+app.use(bodyParser.json());
+
+let employees = []; // in-memory DB
+
+// Create employee
+app.post('/employees', (req, res) => {
+  const employee = { id: Date.now(), ...req.body };
+  employees.push(employee);
+  res.status(201).json(employee);
+});
+
+// Get all employees
+app.get('/employees', (req, res) => {
+  res.json(employees);
+});
+
+// Get one employee
+app.get('/employees/:id', (req, res) => {
+  const employee = employees.find(e => e.id == req.params.id);
+  employee ? res.json(employee) : res.status(404).json({ message: 'Not found' });
+});
+
+// Update employee
+app.put('/employees/:id', (req, res) => {
+  const index = employees.findIndex(e => e.id == req.params.id);
+  if (index >= 0) {
+    employees[index] = { ...employees[index], ...req.body };
+    res.json(employees[index]);
+  } else {
+    res.status(404).json({ message: 'Not found' });
+  }
+});
+
+// Delete employee
+app.delete('/employees/:id', (req, res) => {
+  employees = employees.filter(e => e.id != req.params.id);
+  res.json({ message: 'Deleted successfully' });
+});
+
+const PORT = 3000;
+app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));

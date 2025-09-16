@@ -66,7 +66,7 @@ It demonstrates CRUD operations, querying, and aggregation with clean JSON respo
 
 ---
 
-## 🔗 API Endpoints
+## API Endpoints
 
 ### Employees
 
